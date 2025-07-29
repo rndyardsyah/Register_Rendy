@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+</head>
+<body>
+
+    <h2>Login</h2>
+    <div id="login-form-container">
+        <form id="login-form">
+            <input type="text" id="username" placeholder="Masukkan username" required>
+            <input type="password" id="password" placeholder="Masukkan password" required>
+            <button type="submit">Login</button>
+        </form>
+        <div class="error-message" id="error-message" style="color: red; display: none;">Username atau password salah!</div>
+    </div>
+
+    <div id="welcome-message-container" style="display: none;">
+        <h2>Selamat Datang!</h2>
+        <p>Halo, <span id="user-name"></span></p>
+        <button id="logout-btn">Logout</button>
+    </div>
+
+    <script>
+        // User dan password yang di-hardcode
+        const USERNAME = "admin";
+        const PASSWORD = "password123";
+
+        // Ambil elemen
+        const loginForm = document.getElementById("login-form");
+        const errorMessage = document.getElementById("error-message");
+        const welcomeMessageContainer = document.getElementById("welcome-message-container");
+        const loginFormContainer = document.getElementById("login-form-container");
+        const userNameDisplay = document.getElementById("user-name");
+        const logoutBtn = document.getElementById("logout-btn");
+
+        // Cek apakah pengguna sudah login sebelumnya
+        if (localStorage.getItem("username")) {
+            showWelcomePage();
+        }
+
+        // Event listener untuk form login
+        loginForm.addEventListener("submit", function(event) {
+            event.preventDefault(); // Mencegah form untuk submit secara default
+
+            const usernameInput = document.getElementById("username").value;
+            const passwordInput = document.getElementById("password").value;
+
+            if (usernameInput === USERNAME && passwordInput === PASSWORD) {
+                // Menyimpan username di localStorage
+                localStorage.setItem("username", usernameInput);
+
+                // Tampilkan halaman selamat datang
+                showWelcomePage();
+            } else {
+                errorMessage.style.display = "block"; // Tampilkan pesan error
+            }
+        });
+
+        // Fungsi untuk menampilkan halaman selamat datang
+        function showWelcomePage() {
+            loginFormContainer.style.display = "none";  // Sembunyikan form login
+            welcomeMessageContainer.style.display = "block";  // Tampilkan halaman selamat datang
+
+            const username = localStorage.getItem("username");
+            userNameDisplay.textContent = username;
+        }
+
+        // Event listener untuk logout
+        logoutBtn.addEventListener("click", function() {
+            // Hapus username dari localStorage dan kembali ke halaman login
+            localStorage.removeItem("username");
+
+            // Tampilkan form login lagi
+            loginFormContainer.style.display = "block";
+            welcomeMessageContainer.style.display = "none";
+        });
+    </script>
+
+</body>
+</html>
